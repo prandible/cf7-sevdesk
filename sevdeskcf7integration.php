@@ -1,8 +1,8 @@
 <?php
 
 /*
-  Plugin Name: SevDesk Contact Form 7 Integrator
-  Description: SevDesk Contact Form 7 Integrator
+  Plugin Name: SevDesk Contact Form 7 Automatisierung
+  Description: Dieses Plugin integriert Contact Form 7 mit deiner SevDesk Buchhaltung. Es überträgt bereits eingegebene Daten automatisch an SevDesk.
   Version: 1.0
  */
 
@@ -18,7 +18,10 @@ function getCurl() {
 
 function onFormSubmit() {
 
+
 var_dump($_POST);
+
+
 
     $id = $_POST['_wpcf7'];
 
@@ -87,10 +90,12 @@ var_dump($_POST);
         }
 
 
+
         curl_setopt($curl, CURLOPT_URL, $api_url . '/Invoice/?limit=10000&token=' . $api_key);
         $invoices = json_decode(curl_exec($curl));
         var_dump($invoices);
         die();
+
 
 
 
@@ -211,6 +216,7 @@ var_dump($_POST);
 
 add_action('wpcf7_mail_sent', 'onFormSubmit', 10, 2);
 
+
 add_action('init', function() {
     if (isset($_GET['test_api'])) {
         $_POST['Masterkurs'] = 'M1-2019 / Start 06. September 2019 / 20 Seminartage';
@@ -227,6 +233,7 @@ add_action('init', function() {
         die();
     }
 });
+
 
 function companies_metabox($post) {
     ?>
