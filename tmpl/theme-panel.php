@@ -40,6 +40,9 @@ Rechnungsadresse
             $yourEmail = get_option('your-email_'.$form->ID);
             $Rechnungsadresse = get_option('Rechnungsadresse_'.$form->ID);
             $Ort = get_option('Ort_'.$form->ID);
+            $header = get_option('header_'.$form->ID);
+            $footer = get_option('footer_'.$form->ID);
+   
 
 
             ?>
@@ -54,6 +57,14 @@ Rechnungsadresse
             <p><span>Ort</span> <input name="Ort_<?php echo $form->ID ?>" value="<?php echo $Ort  ?>" /></p>
             <p><span>Email-Adresse</span> <input name="your-email_<?php echo $form->ID ?>" value="<?php echo $yourEmail  ?>" /></p>
             <p><span>Rechnungsadresse</span> <input name="Rechnungsadresse_<?php echo $form->ID ?>" value="<?php echo $Rechnungsadresse  ?>" /></p>
+            <p>
+                <span>Header</span>
+                 <?php wp_editor( $header, 'header_'.$form->ID); ?> 
+            </p>
+            <p>
+                <span>Footer</span>
+                 <?php wp_editor( $footer, 'footer_'.$form->ID); ?> 
+            </p>
         </div>
         <?php endforeach ?>
         <?php } ?>
