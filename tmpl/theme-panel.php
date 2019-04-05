@@ -40,6 +40,7 @@ Rechnungsadresse
             $yourEmail = get_option('your-email_'.$form->ID);
             $Rechnungsadresse = get_option('Rechnungsadresse_'.$form->ID);
             $Ort = get_option('Ort_'.$form->ID);
+            $phone = get_option('phone_'.$form->ID);
             $header = get_option('header_'.$form->ID);
             $footer = get_option('footer_'.$form->ID);
    
@@ -54,6 +55,7 @@ Rechnungsadresse
             <p><span>Nachname</span> <input name="nachname_<?php echo $form->ID ?>" value="<?php echo $nachname  ?>" /></p>
             <p><span>Firma</span> <input name="Firma_<?php echo $form->ID ?>" value="<?php echo  $Firma ?>" /></p>
             <p><span>Adresse</span> <input name="Adresse_<?php echo $form->ID ?>" value="<?php echo $Adresse  ?>" /></p>
+            <p><span>Phone</span> <input name="phone_<?php echo $form->ID ?>" value="<?php echo $phone  ?>" /></p>
             <p><span>Ort</span> <input name="Ort_<?php echo $form->ID ?>" value="<?php echo $Ort  ?>" /></p>
             <p><span>Email-Adresse</span> <input name="your-email_<?php echo $form->ID ?>" value="<?php echo $yourEmail  ?>" /></p>
             <p><span>Rechnungsadresse</span> <input name="Rechnungsadresse_<?php echo $form->ID ?>" value="<?php echo $Rechnungsadresse  ?>" /></p>

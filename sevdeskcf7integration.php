@@ -19,7 +19,7 @@ function getCurl() {
 function onFormSubmit() {
 
 
-/*var_dump($_POST);*/
+    /* var_dump($_POST); */
 
 
 
@@ -33,6 +33,7 @@ function onFormSubmit() {
     $Adresse = get_option('Adresse_' . $id);
     $yourEmail = get_option('your-email_' . $id);
     $Rechnungsadresse = get_option('Rechnungsadresse_' . $id);
+    $phone = get_option('phone_' . $id);
     $Ort = get_option('Ort_' . $id);
     $header = get_option('header_' . $id);
     $footer = get_option('footer_' . $id);
@@ -50,6 +51,7 @@ function onFormSubmit() {
         $street_name_number = $_POST[$Adresse];
         $email = $_POST[$yourEmail];
         $Rechnungsadresse = $_POST[$Rechnungsadresse];
+        $phone = $_POST[$phone];
 
         $code = trim($_POST['Ort']);
         $code = explode(',', $code);
@@ -86,23 +88,20 @@ function onFormSubmit() {
 
         curl_setopt($curl, CURLOPT_URL, $api_url . '/Contact/?limit=10000&depth=1&token=' . $api_key);
         $contacts = json_decode(curl_exec($curl));
-       
-       
+
+
         $next_customer_number = 0;
-        if(!empty($contacts))
-        {
-            foreach($contacts->objects as $cust)
-            {
-                $cn = (int)$cust->customerNumber;
-                if($cn>$next_customer_number)
-                {
+        if (!empty($contacts)) {
+            foreach ($contacts->objects as $cust) {
+                $cn = (int) $cust->customerNumber;
+                if ($cn > $next_customer_number) {
                     $next_customer_number = $cn;
                 }
             }
         }
         $next_customer_number++;
-        
-        
+
+
 
         if (isset($contacts->status) && $contacts->status == 401) {
             return;
@@ -112,21 +111,23 @@ function onFormSubmit() {
 
         curl_setopt($curl, CURLOPT_URL, $api_url . '/Invoice/?limit=10000&token=' . $api_key);
         $invoices = json_decode(curl_exec($curl));
-        
+
         $next_invoice_number = 0;
-        
-        if(!empty($invoices))
-        {
-            foreach($invoices->objects as $in)
-            {
-                $number = (int)$in->invoiceNumber;
-                if($number>$next_invoice_number)
-                {
+
+        if (!empty($invoices)) {
+            foreach ($invoices->objects as $in) {
+                $number = explode('-', $in->invoiceNumber);
+                $number = array_pop($number);
+                $number = (int) $number;
+                if ($number > $next_invoice_number) {
                     $next_invoice_number = $number;
                 }
             }
         }
         $next_invoice_number++;
+
+        $next_invoice_number = 'RE-' . date('Y') . '-' . $next_invoice_number;
+
 
         $name = $first_name . ' ' . $last_name;
         $new = true;
@@ -177,6 +178,11 @@ function onFormSubmit() {
             curl_setopt($curl, CURLOPT_URL, $api_url . '/Contact/' . $id . '/addEmail/?key=1&value=' . $email . '&token=' . $api_key);
             $ca = json_decode(curl_exec($curl));
 
+            if (trim($phone)) {
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_URL, $api_url . '/Contact/' . $id . '/addPhone/?key=1&value=' . $phone . '&token=' . $api_key);
+                $ca = json_decode(curl_exec($curl));
+            }
 
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_URL, $api_url . '/ContactAddress/?contact[objectName]=Contact&contact[id]=' . $id . '&country[id]=1&country[objectName]=StaticCountry&zip=' . urlencode($zip_code) . '&city=' . urlencode($city) . '&street=' . urlencode($street_name_number) . '&token=' . $api_key);
@@ -191,24 +197,23 @@ function onFormSubmit() {
         } else {
             $name = $first_name . ' ' . $last_name;
         }
-        
-        if(trim($Rechnungsadresse))
-        {
-            $Rechnungsadresse = '<br /><br />'.$Rechnungsadresse;
+
+        if (trim($Rechnungsadresse)) {
+            $Rechnungsadresse = '<br /><br />' . $Rechnungsadresse;
         }
-        
-        $Rechnungsadresse.='<br /><br />'.$field1.' '.$field2;
+
+        $Rechnungsadresse .= '<br /><br />' . $field1 . ' ' . $field2;
 
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_URL, $api_url . '/Invoice/'
                 . '?header=' . $name
                 . '&invoiceNumber=' . $next_invoice_number
                 . '&invoiceType=RE'
-                . '&headText=' . urlencode($header.$Rechnungsadresse)
+                . '&headText=' . urlencode($header . $Rechnungsadresse)
                 . '&footText=' . urlencode($footer)
                 . '&addressName=' . urlencode($street_name_number . "\n" . $zip_code . ' ' . $city)
                 . '&invoiceDate=' . date('Y-m-d') . 'T' . date('H:i:s')
-                . '&timeToPay=7'  
+                . '&timeToPay=7'
                 . '&contactPerson[id]=' . $sevUser->objects[0]->id
                 . '&contactPerson[objectName]=SevUser'
                 . '&contact[id]=' . $id . ''
@@ -233,9 +238,9 @@ function onFormSubmit() {
             $price = 0;
         }
         /*
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_URL, $api_url . '/InvoicePos/?invoice[id]=' . $invoice->objects->id . '&invoice[objectName]=Invoice&name=' . urlencode($field1) . '&quantity=1&price=' . $price . '&unity[id]=1&unity[objectName]=Unity&taxRate=&token=' . $api_key);
-        $ca = json_decode(curl_exec($curl));*/
+          curl_setopt($curl, CURLOPT_POST, true);
+          curl_setopt($curl, CURLOPT_URL, $api_url . '/InvoicePos/?invoice[id]=' . $invoice->objects->id . '&invoice[objectName]=Invoice&name=' . urlencode($field1) . '&quantity=1&price=' . $price . '&unity[id]=1&unity[objectName]=Unity&taxRate=&token=' . $api_key);
+          $ca = json_decode(curl_exec($curl)); */
 
         $price = explode('€', $field2);
         if (isset($price[1])) {
@@ -246,9 +251,9 @@ function onFormSubmit() {
             $price = 0;
         }
         /*
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_URL, $api_url . '/InvoicePos/?invoice[id]=' . $invoice->objects->id . '&invoice[objectName]=Invoice&name=' . urlencode($field2) . '&quantity=1&price=' . $price . '&unity[id]=1&unity[objectName]=Unity&taxRate=&token=' . $api_key);
-        $ca = json_decode(curl_exec($curl));*/
+          curl_setopt($curl, CURLOPT_POST, true);
+          curl_setopt($curl, CURLOPT_URL, $api_url . '/InvoicePos/?invoice[id]=' . $invoice->objects->id . '&invoice[objectName]=Invoice&name=' . urlencode($field2) . '&quantity=1&price=' . $price . '&unity[id]=1&unity[objectName]=Unity&taxRate=&token=' . $api_key);
+          $ca = json_decode(curl_exec($curl)); */
     }
 }
 
@@ -259,11 +264,12 @@ add_action('init', function() {
     if (isset($_GET['test_api'])) {
         $_POST['Masterkurs'] = 'M1-2019 / Start 06. September 2019 / 20 Seminartage';
         $_POST['PreisMaster'] = '€ 3.040,- (M1-2019 Frühbucher bei Anmeldung bis 06.06.2019)';
-        $_POST['your-name'] = 'Cezary 3';
-        $_POST['nachname'] = 'Testing 3';
-        $_POST['Firma'] = 'Company test';
+        $_POST['your-name'] = 'Cezary 4';
+        $_POST['nachname'] = 'Testing 4';
+        $_POST['Firma'] = '';
         $_POST['Adresse'] = 'Gaikowa 11';
         $_POST['Ort'] = '87-100 Toruń';
+        $_POST['Telefonnummer'] = '511938622';
         $_POST['your-email'] = 'testing@testing.com';
         $_POST['Rechnungsadresse'] = 'Rechnungsadresse field content';
         $_POST['_wpcf7'] = '5';
@@ -271,7 +277,6 @@ add_action('init', function() {
         die();
     }
 });
-
 
 function companies_metabox($post) {
     ?>
