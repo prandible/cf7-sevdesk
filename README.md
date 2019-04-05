@@ -3,13 +3,13 @@ Automation for SevDesk Users. Send your Contact Form 7 input to SevDesk
 
 # How to Install
 
-1. Download this code as a ZIP File
+1. Download this code as a ZIP File <img src="https://media.giphy.com/media/hTlkBEPgc2EFJc2WPt/source.gif">
 2. Upload it as a new WordPress Plugin
 3. Insert your SevDesk API, which you'll find on the SevDesk Backend --> Settings --> Select a user --> Click API and Copy/ Paste it into the Plugin
 4. Match the fields according to your contact form 7 input labels
 5. Insert a custom header and footer text
 
-<iframe src="https://giphy.com/embed/hTlkBEPgc2EFJc2WPt" width="480" height="215" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/hTlkBEPgc2EFJc2WPt">via GIPHY</a></p>
+
 
 
 
