@@ -9,6 +9,10 @@ Automation for SevDesk Users. Send your Contact Form 7 input to SevDesk
 4. Match the fields according to your contact form 7 input labels
 5. Insert a custom header and footer text
 
+<iframe src="https://giphy.com/embed/hTlkBEPgc2EFJc2WPt" width="480" height="215" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/hTlkBEPgc2EFJc2WPt">via GIPHY</a></p>
+
+
+
 That's it, now you can test your automation between Contact Form 7 and SevDesk. With this plugin you will be able to send new users as Customers and create invoice drafts in SevDesk. 
 
 If you have any question about this, pls open an issue or get in touch with me.
