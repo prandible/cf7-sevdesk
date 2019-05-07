@@ -88,6 +88,7 @@ function onFormSubmit() {
 
         curl_setopt($curl, CURLOPT_URL, $api_url . '/Contact/?limit=10000&depth=1&token=' . $api_key);
         $contacts = json_decode(curl_exec($curl));
+       
 
 
         $next_customer_number = 0;

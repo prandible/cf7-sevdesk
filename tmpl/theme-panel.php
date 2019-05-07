@@ -61,11 +61,13 @@ Rechnungsadresse
             <p><span>Rechnungsadresse</span> <input name="Rechnungsadresse_<?php echo $form->ID ?>" value="<?php echo $Rechnungsadresse  ?>" /></p>
             <p>
                 <span>Header</span>
-                 <?php wp_editor( $header, 'header_'.$form->ID); ?> 
+                <textarea class="the-textarea-sev"  name="<?php echo 'header_'.$form->ID ?>"><?php echo $header ?></textarea>
+                 <?php //wp_editor( $header, 'header_'.$form->ID); ?> 
             </p>
             <p>
                 <span>Footer</span>
-                 <?php wp_editor( $footer, 'footer_'.$form->ID); ?> 
+                 <?php //wp_editor( $footer, 'footer_'.$form->ID); ?> 
+                <textarea class="the-textarea-sev" name="<?php echo 'footer_'.$form->ID ?>"><?php echo $footer ?></textarea>
             </p>
         </div>
         <?php endforeach ?>
@@ -104,6 +106,13 @@ Rechnungsadresse
         font-weight: bold;
         display:block;
     }
+    
+    .the-textarea-sev
+    {
+        height: 300px;
+        width: 100%;
+        max-width: 500px;
+    }
 
     .one-segment-form
     {
@@ -114,6 +123,7 @@ Rechnungsadresse
     {
         display: inline-block;
         width: 120px;
+        vertical-align: top;
     }
 
     .save
