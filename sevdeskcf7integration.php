@@ -37,6 +37,7 @@ function onFormSubmit() {
     $Ort = get_option('Ort_' . $id);
     $header = get_option('header_' . $id);
     $footer = get_option('footer_' . $id);
+    $create_invoice = get_option('create_invoice_' . $id);
 
 
 
@@ -255,7 +256,12 @@ function onFormSubmit() {
                 . '&smallSettlement='
                 . '&currency=EUR'
                 . '&token=' . $api_key);
-        $invoice = json_decode(curl_exec($curl));
+        
+        if($create_invoice=='yes')
+        {
+            $invoice = json_decode(curl_exec($curl));
+        }
+        
 
         $price = explode('€', $field1);
         if (isset($price[1])) {
