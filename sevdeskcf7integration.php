@@ -88,7 +88,7 @@ function onFormSubmit() {
 
         curl_setopt($curl, CURLOPT_URL, $api_url . '/Contact/?limit=10000&depth=1&token=' . $api_key);
         $contacts = json_decode(curl_exec($curl));
-       
+
 
 
         $next_customer_number = 0;
@@ -134,7 +134,26 @@ function onFormSubmit() {
         $new = true;
         $id = false;
 
+        /*var_dump($contacts->objects);
+        die();*/
+
         foreach ($contacts->objects as $cont) {
+
+            $u = $api_url . '/Contact/' . $cont->id . '/getMainEmail?token=' . $api_key;
+            
+            curl_setopt($curl, CURLOPT_URL, $u);
+            $emailContact = json_decode(curl_exec($curl));
+            
+            
+           
+            
+            if(isset($emailContact->objects) && isset($emailContact->objects->value) && $emailContact->objects->value==$email)
+            {
+                $new = false;
+                $id = $cont->id;
+                 break;
+            }
+
             if (trim($company) && $cont->name == $company) {
                 $new = false;
                 $id = $cont->id;
@@ -145,9 +164,6 @@ function onFormSubmit() {
                 break;
             }
         }
-
-
-
 
         if ($new) {
             /* get categories */
