@@ -181,10 +181,21 @@ function onFormSubmit() {
 
             curl_setopt($curl, CURLOPT_POST, true);
 
+      
+            
             if (trim($company)) {
                 curl_setopt($curl, CURLOPT_URL, $api_url . '/Contact/?status=1000&customerNumber=' . urlencode($next_customer_number) . '&address[country][code]=de&address[country][code]=germany&name=' . urlencode($company) . '&address[zip]=' . urlencode($zip_code) . '&address[city]=' . urlencode($city) . '&address[street]=' . urlencode($street_name_number) . '&name2=' . urlencode($name) . '&category[id]=' . $cat_id . '&category[objectName]=' . $cat_name . '&token=' . $api_key);
             } else {
-                curl_setopt($curl, CURLOPT_URL, $api_url . '/Contact/?status=1000&customerNumber=' . urlencode($next_customer_number) . '&address[country][code]=de&address[country][code]=germany&name2=' . urlencode($company) . '&address[zip]=' . urlencode($zip_code) . '&address[city]=' . urlencode($city) . '&address[street]=' . urlencode($street_name_number) . '&name2=' . urlencode($name) . '&surename=' . urlencode($first_name) . '&familyname=' . urlencode($last_name) . '&category[id]=' . $cat_id . '&category[objectName]=' . $cat_name . '&token=' . $api_key);
+                curl_setopt($curl, CURLOPT_URL, $api_url . '/Contact/?status=1000&customerNumber=' . urlencode($next_customer_number) . '&address[country][code]=de&address[country][code]=germany&name2=' . '' . '&address[zip]=' . urlencode($zip_code) . '&address[city]=' . urlencode($city) . '&address[street]=' . urlencode($street_name_number) . '&name2=' . '' . '&surename=' . urlencode($first_name) . '&familyname=' . urlencode($last_name) . '&category[id]=' . $cat_id . '&category[objectName]=' . $cat_name . '&token=' . $api_key);
+            }
+            
+            if($company)
+            {
+                $nameAddr = $company;
+            }
+            else
+            {
+                $nameAddr = $name;
             }
 
             $person = json_decode(curl_exec($curl));
@@ -228,7 +239,7 @@ function onFormSubmit() {
                 . '&invoiceType=RE'
                 . '&headText=' . urlencode($header . $Rechnungsadresse)
                 . '&footText=' . urlencode($footer)
-                . '&addressName=' . urlencode($street_name_number . "\n" . $zip_code . ' ' . $city)
+                . '&addressName='. urlencode($nameAddr."\n").  urlencode($street_name_number . "\n" . $zip_code . ' ' . $city)
                 . '&invoiceDate=' . date('Y-m-d') . 'T' . date('H:i:s')
                 . '&timeToPay=7'
                 . '&contactPerson[id]=' . $sevUser->objects[0]->id
