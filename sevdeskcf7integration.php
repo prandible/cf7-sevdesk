@@ -234,7 +234,7 @@ function onFormSubmit() {
 
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_URL, $api_url . '/Invoice/'
-                . '?header=' . $name
+                . '?header=' . urlencode('Rechnung Nr. '.$next_invoice_number)
                 . '&invoiceNumber=' . $next_invoice_number
                 . '&invoiceType=RE'
                 . '&headText=' . urlencode($header . $Rechnungsadresse)
