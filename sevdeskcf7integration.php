@@ -90,7 +90,6 @@ function onFormSubmit() {
         $contacts = json_decode(curl_exec($curl));
 
 
-
         $next_customer_number = 0;
         if (!empty($contacts)) {
             foreach ($contacts->objects as $cust) {
@@ -169,14 +168,15 @@ function onFormSubmit() {
             /* get categories */
             curl_setopt($curl, CURLOPT_URL, $api_url . '/Category/?limit=10000&token=' . $api_key);
             $categories = json_decode(curl_exec($curl));
+           
 
 
 
             /* create new contact! */
 
             $cat = new stdClass();
-            $cat_id = $categories->objects[0]->id;
-            $cat_name = $categories->objects[0]->objectName;
+            $cat_id = 3;//$categories->objects[0]->id;
+            $cat_name = 'Category';//$categories->objects[0]->objectName;
 
 
             curl_setopt($curl, CURLOPT_POST, true);
